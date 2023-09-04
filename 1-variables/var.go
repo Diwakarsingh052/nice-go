@@ -23,11 +23,14 @@ func main() {
 	fmt.Println("hello world")
 	fmt.Println(i, name, sName, sAge)
 
+	//put related things together or all the options in this block
 	var (
+		//camelCase
 		uName  string
 		uAge   int = 15
 		uMarks float64
 	)
+
 	fmt.Println(uName, uAge, uMarks)
 	//time.Second // peek into it for design pattern
 	//http.StatusInternalServerError
