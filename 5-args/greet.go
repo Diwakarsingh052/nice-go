@@ -23,13 +23,23 @@ func greet() {
 
 	name := data[0]
 	ageString := data[1]
+	marksString := data[2]
 	//var err error // default value is nil // indicates no error
 	//fmt.Println(err)
+	//handle the error in the next line
 	age, err := strconv.Atoi(ageString)
+	if err != nil {
+		log.Println("some kind of error", err)
+		return
+
+	}
+
+	marks, err := strconv.Atoi(marksString)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	fmt.Println(name, age)
+	fmt.Println(name, age, marks)
+	fmt.Println()
 
 }

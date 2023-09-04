@@ -11,7 +11,6 @@ func main() {
 	//slicing
 	cmdArgs := os.Args[1:]
 	fmt.Println(cmdArgs[0])
-	len()
 
 }
 
