@@ -23,10 +23,11 @@ func SumString(s, x string) (int, error) { // err must be the last value to be r
 }
 
 func main() {
-	sum, err := SumString("a", "20")
+	sum, err := SumString("10", "0")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	fmt.Println(sum)
+
 }
