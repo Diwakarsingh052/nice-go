@@ -8,7 +8,7 @@ import "fmt"
 // "Don’t design with interfaces, discover them". - Rob Pike
 // Bigger the interface weaker the abstraction // Rob Pike
 
-// add a method named as hello()
+// add a method named as hello() in interface
 type reader interface {
 	read(b []byte) (int, error)
 }
