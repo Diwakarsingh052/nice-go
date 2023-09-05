@@ -13,6 +13,7 @@ type reader interface {
 	read(b []byte) (int, error)
 }
 
+// add show method to the file struct
 type file struct {
 	name string
 }
@@ -42,6 +43,7 @@ func fetchData(r reader) {
 	r.read(data)
 	fmt.Println(string(data))
 	fmt.Println()
+	//access the show method here using the interface var
 }
 
 func main() {
