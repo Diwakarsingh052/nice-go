@@ -11,6 +11,7 @@ import "fmt"
 // add a method named as hello() in interface
 type reader interface {
 	read(b []byte) (int, error)
+	//hello() // all the methods should be impl over the struct to use the interface
 }
 
 // add show method to the file struct
@@ -23,6 +24,9 @@ func (f file) read(b []byte) (int, error) {
 	s := "hello go devs"
 	copy(b, s)
 	return len(b), nil
+}
+func (f file) show() {
+
 }
 
 type json struct {
@@ -43,7 +47,8 @@ func fetchData(r reader) {
 	r.read(data)
 	fmt.Println(string(data))
 	fmt.Println()
-	//access the show method here using the interface var
+	//r.show() // can't access local methods of types using interface var
+
 }
 
 func main() {
