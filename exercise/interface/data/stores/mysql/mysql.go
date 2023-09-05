@@ -1,4 +1,4 @@
-package postgres
+package mysql
 
 import (
 	"context"
@@ -17,14 +17,14 @@ func NewConn(db *sql.DB) *Conn {
 }
 
 func (p *Conn) Create(ctx context.Context, usr data.User) error {
-	fmt.Println("adding to postgres", usr)
+	fmt.Println("adding to mysql", usr)
 	return nil
 }
 func (p *Conn) Update(ctx context.Context, usr data.User) error {
-	fmt.Println("updating in postgres", usr)
+	fmt.Println("updating in mysql", usr)
 	return nil
 }
 func (p *Conn) Delete(ctx context.Context, usr data.User) error {
-	fmt.Println("deleting in postgres", usr)
+	fmt.Println("deleting in mysql", usr)
 	return nil
 }

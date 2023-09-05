@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 )
 
 type user struct {
@@ -18,7 +17,7 @@ func (u user) Write(p []byte) (n int, err error) {
 
 func main() {
 	var u user
-	os.Stdout
+	// we need to implement the writer interface to pass user object to log.New function
 	l := log.New(u, "sales-app: ", log.Lshortfile) // remove the compile time error
 	l.Println("hello")
 }

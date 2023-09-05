@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// Storer interface declares the behavior this package needs to perists and
+// Storer interface declares the behavior this package needs to persists and
 // retrieve data.
 type Storer interface {
 	Create(ctx context.Context, usr User) error
@@ -22,5 +22,6 @@ type Store struct {
 // NewStore constructs a core for data api access.
 func NewStore(storer Storer) *Store {
 	//initialize the store struct
+	return &Store{Storer: storer}
 
 }
