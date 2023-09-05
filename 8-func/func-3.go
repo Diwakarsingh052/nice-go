@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // passing function to another function
 func main() {
@@ -11,8 +9,10 @@ func main() {
 	//add := func(x, y int) {
 	//	fmt.Println(x + y)
 	//}
-	sub := func(x, y int) {
-		fmt.Println(x - y)
+	sub := func(x, y int) int {
+		//fmt.Println(x - y)
+		return x - y
+
 	}
 
 	//add could be passed to operate function because the signature matches
@@ -22,11 +22,13 @@ func main() {
 
 }
 
-func add(x, y int) {
-	fmt.Println(x + y)
+func add(x, y int) int {
+	//fmt.Println(x + y)
+	return x + y
+
 }
 
 // change the signature to accept the float values
-func operate(op func(a int, b int), s, y int) {
-	op(s, y)
+func operate(op func(a int, b int) int, s, y int) {
+	fmt.Println(op(s, y))
 }
