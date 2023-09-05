@@ -9,6 +9,6 @@ type user struct {
 
 func main() {
 	var u user
-	l := log.New(u, "sales-app: ", log.Lshortfile)
+	l := log.New(u, "sales-app: ", log.Lshortfile) // remove the compile time error
 	l.Println("hello")
 }
