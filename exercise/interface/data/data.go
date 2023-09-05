@@ -12,6 +12,8 @@ type Storer interface {
 	Delete(ctx context.Context, usr User) error
 }
 
+var StorerInterface Storer
+
 // Store manages the set of APIs for data access.
 type Store struct {
 	Storer
