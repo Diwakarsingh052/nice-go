@@ -5,5 +5,5 @@ func main() {
 
 	// call newConn
 	// call newStore
-	//call create method
+	//call create method using the newStore variable
 }

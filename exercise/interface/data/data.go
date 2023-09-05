@@ -20,4 +20,5 @@ type Store struct {
 // NewStore constructs a core for data api access.
 func NewStore(storer Storer) *Store {
 	//initialize the store struct
+
 }
