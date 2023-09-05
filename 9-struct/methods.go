@@ -18,6 +18,7 @@ func (u *user) show() { // func(receiver)methodName(Args)returnTypes {}
 func (u *user) updatePassword(password string) {
 	u.Password = password
 }
+
 func main() {
 	u1 := user{
 		Name:     "raj",
