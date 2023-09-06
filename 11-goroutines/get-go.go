@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"io"
 
 	"log"
@@ -117,9 +116,9 @@ func doGetRequest(urls []string) {
 				continue
 
 			}
-
-			defer r.resp.Body.Close()
-
+			func() {
+				defer r.resp.Body.Close()
+			}()
 			if r.resp.StatusCode > 299 {
 
 				log.Printf("Response failed with status code: %d and\nbody: %s\n", r.resp.StatusCode, bytes)
