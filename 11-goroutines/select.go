@@ -47,6 +47,7 @@ func main() {
 	go func() {
 		defer wg.Done()
 		for {
+			fmt.Println("running loop")
 			select {
 			// whichever case is not blocking exec that first
 			//whichever case is ready first exec that.
