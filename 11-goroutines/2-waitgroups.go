@@ -3,13 +3,17 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 func main() {
+
+	//panic("work") // panic reveals go routines id
 	wg := &sync.WaitGroup{}
-	wg.Add(1) //  // counter to add number of goroutines that we are starting or spinning up
+
 	for i := 1; i <= 10; i++ {
-		work(i, wg) // make this func call concurrent
+		wg.Add(1)      // counter to add number of goroutines that we are starting or spinning up
+		go work(i, wg) // each func call creates a goroutine
 	}
 	//tasks in main
 	// it will wait until counter resets to zero
@@ -17,6 +21,16 @@ func main() {
 }
 
 func work(i int, wg *sync.WaitGroup) {
+	defer wg.Done() // decrements the counter by one //
+	wg1 := &sync.WaitGroup{}
+	wg1.Add(1)
+	go func() {
+		defer wg1.Done()
+		time.Sleep(1 * time.Second)
+		fmt.Println("some go routine")
+
+	}()
 	fmt.Println("I am doing some work", i)
-	wg.Done() // decrements the counter by one //
+	wg1.Wait()
+
 }
