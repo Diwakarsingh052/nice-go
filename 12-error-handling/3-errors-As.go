@@ -28,16 +28,18 @@ func main() {
 	//fmt.Println(err)
 	//os.PathError{}
 	//os.SyscallError{}
-	var q *QueryError //nil
+
 	err := SearchSomething("data")
 	fmt.Println(err)
 	err = SearchName("raj")
 	fmt.Println(err)
-	
+
+	var q *QueryError       //nil
 	if errors.As(err, &q) { // reference imp // it checks whether struct is inside the error chain or not
 		fmt.Println("true", q.Func)
 		return
 	}
+
 	fmt.Println("not")
 
 }
