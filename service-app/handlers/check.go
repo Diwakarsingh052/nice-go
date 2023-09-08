@@ -2,16 +2,21 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"net/http"
+	"service-app/web"
 )
 
+var ErrCheck = errors.New("check trusted error")
+
 func check(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "application/json")
+
 	status := struct {
 		Status string
 	}{Status: "ok"}
-
-	return json.NewEncoder(w).Encode(status)
-
+	_ = status
+	//return json.NewEncoder(w).Encode(status)
+	//return web.Respond(ctx, w, status, http.StatusOK)
+	//return errors.New("some kind of error")
+	return web.NewRequestError(ErrCheck, http.StatusBadRequest)
 }

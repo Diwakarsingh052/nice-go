@@ -18,7 +18,7 @@ func API(log *zap.Logger) http.Handler {
 	m := middleware.NewMid(log)
 
 	//HandleFunc is the custom implementation // it is defined over the app struct
-	app.HandleFunc(http.MethodGet, "/check", m.Logger(check))
+	app.HandleFunc(http.MethodGet, "/check", m.Logger(m.Error(check)))
 
 	//we can return the app struct as it implements the http.Handler interface
 	return app
