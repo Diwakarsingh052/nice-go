@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
@@ -12,13 +13,20 @@ import (
 
 // go mod tidy // run it first time to set up this project and its deps,
 func main() {
-	err := startApp()
+
+	logging, err := setupLogger()
 	if err != nil {
 		log.Fatal(err)
+		return
+	}
+	err = startApp(logging)
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
 }
 
-func startApp() error {
+func startApp(log *zap.Logger) error {
 	api := http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  8000 * time.Second,
@@ -28,7 +36,8 @@ func startApp() error {
 	// channel to store any errors while setting up the service
 	serverErrors := make(chan error, 1)
 	go func() {
-		log.Printf("main: API listening on %s", api.Addr)
+		//log.Printf("main: API listening on %s", api.Addr)
+		log.Info("main: API listening on", zap.String("address", api.Addr))
 		serverErrors <- api.ListenAndServe()
 	}()
 
@@ -37,10 +46,14 @@ func startApp() error {
 	signal.Notify(shutdown, os.Interrupt) // this will notify the shutdown chan if someone presses ctr+c
 
 	select {
+	//this case would exec in case server is not able to start
 	case err := <-serverErrors:
 		return fmt.Errorf("server error %w", err)
+
+	//this case runs when someone pressed ctrl+c
 	case sig := <-shutdown:
-		log.Printf("main: %v : Start graceful shutdown", sig)
+		//log.Printf("main: %v : Start graceful shutdown", sig)
+		log.Info("main: Start shutdown", zap.Any("signal", sig))
 		ctx := context.Background()
 		//creating a timeout of 10 seconds for our service to close the connections
 		ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
