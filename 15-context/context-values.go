@@ -13,6 +13,7 @@ import (
 type key string
 
 func main() {
+	// context is used to pass values in request lifecycle or for timeouts and cancellation
 
 	ctx := context.Background() // it creates an empty container to put values and timeouts
 	//context.TODO() if not sure about what context to use then go with it
