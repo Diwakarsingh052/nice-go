@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/google/uuid"
 	"log"
@@ -12,6 +13,11 @@ import (
 // go get github.com/google/uuid
 // go mod tidy // remove any unused dependency, it will download dependencies listed in go.mod files,
 // update the go.mod file for correct usage of module
+
+type key int
+
+const RequestIDKey key = 123
+
 func main() {
 
 	//Mid func return type should evaluate to func (w http.ResponseWriter,
@@ -35,29 +41,33 @@ func RequestMid(next http.HandlerFunc) http.HandlerFunc {
 		ctx := r.Context()
 		traceId := uuid.NewString()
 		// put the traceId in the context
-
+		ctx = context.WithValue(ctx, RequestIDKey, traceId)
 		next(w, r.WithContext(ctx))
 
 	}
 }
-//LoggingMid // figure out the signature
-func LoggingMid() {
-	//return correct value
-	return {
-		// check context is set or not // get the value out of the context and store in a variable
-		ctx :=  r.Context()
-
+func LoggingMid(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//do middleware specific stuff first and when it is over then go to the actual handler func to exec it
+		// fetching requestId value from the context and making sure the type store in it is of the string type
+		reqID, ok := r.Context().Value(RequestIDKey).(string)
 		if !ok {
 			reqID = "unknown"
 		}
 		log.Printf("%s : started   : %s %s ",
 			reqID,
 			r.Method, r.URL.Path)
+		if r.Method != http.MethodGet {
+			http.Error(w, "method must be get", http.StatusInternalServerError)
+			return
+		}
 
-		next(w, r) // calling the next thing in the chain
+		next(w, r) // executing the next handlerFunc or the middleware in the chain
+
 		log.Printf("%s : completed : %s %s ",
 			reqID,
 			r.Method, r.URL.Path,
+		)
 
 	}
 }
