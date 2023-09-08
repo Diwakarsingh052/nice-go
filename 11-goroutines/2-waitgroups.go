@@ -15,8 +15,8 @@ func main() {
 		wg.Add(1)      // counter to add number of goroutines that we are starting or spinning up
 		go work(i, wg) // each func call creates a goroutine
 	}
-	//tasks in main
-	// it will wait until counter resets to zero
+	//tasks in the main
+	// will wait until the counter resets to zero
 	wg.Wait() // wait at the end of the main
 }
 

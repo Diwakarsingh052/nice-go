@@ -95,7 +95,7 @@ func doGetRequest(urls []string) {
 
 		defer wg.Done()
 
-		//range would stop when channel is closed
+		//range would stop when a channel is closed
 
 		for r := range respChan { // recv over the channel until senders are sending values or channel is not closed
 
