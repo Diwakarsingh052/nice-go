@@ -1,15 +1,16 @@
 package handlers
 
 import (
-	"app/data/user"
 	"encoding/json"
 	"log"
 	"net/http"
+	"small-app/data/user"
+	"strconv"
 )
 
-// /user?user_id=2
+// /data?user_id=2
 
-// GetUser is entry point for /user endpoint
+// GetUser is entry point for /data endpoint
 // think how would you handle the request when someone hit this endpoint
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	// this line set your  ContentType as json
@@ -18,15 +19,14 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	//fetching the variable from query
 	userIdString := r.URL.Query().Get("user_id")
 
-	//converting it to make sure it is a valid uint64 // strconv.Parseuint
-
+	//converting it to make sure it is a valid uint64
+	userId, err := strconv.ParseUint(userIdString, 10, 64)
 	if err != nil {
 		log.Println(err)
-		//try to change the message to please provide a valid user id
 		appErr := map[string]string{"Message": http.StatusText(http.StatusBadRequest)}
 
 		w.WriteHeader(http.StatusBadRequest) // setting error status code
-		json.NewEncoder(w).Encode(appErr)    // converting map to json and sending back to the client using responseWriter
+		json.NewEncoder(w).Encode(appErr)    // converting map to json and sending back to the client using responseWritet
 		return
 
 		////signal with text based error
@@ -38,14 +38,18 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	u, err := user.FetchUser(userId)
 	if err != nil {
 
-		//handle error like a previous case
+		log.Println(err)
+		appErr := map[string]string{"Message": "data id not found"}
+
+		w.WriteHeader(http.StatusBadRequest) // setting error status code
+		json.NewEncoder(w).Encode(appErr)    // converting map to json and sending back to the client using responseWritet
+		return
 
 		//http.Error(w, err.Error(), http.StatusBadRequest)
 		//return
 	}
 
-	//encode the user
-	json.NewEncoder(w).Encode()
+	json.NewEncoder(w).Encode(u)
 	//b, _ := json.Marshal(u)
 	//w.Write(b)
 }

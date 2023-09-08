@@ -9,11 +9,10 @@ var users = map[uint64]User{
 		Email: "bob@email.com",
 	},
 }
-var ErrUserNotFound = errors.New("user id not found")
+var ErrUserNotFound = errors.New("data id not found")
 
 // FetchUser fetches the data from the map
 func FetchUser(id uint64) (User, error) {
-	//checking if id is present in the map or not
 	u, ok := users[id]
 	if !ok {
 		return User{}, ErrUserNotFound

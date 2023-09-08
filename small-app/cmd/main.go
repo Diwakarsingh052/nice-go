@@ -2,15 +2,14 @@ package main
 
 import (
 	"net/http"
+	"small-app/handlers"
 )
 
 // /data?id=2
 
-//localhost:8080/user?user_id=2
-
 func main() {
-	// call the GetUser Func
-	http.HandleFunc("/user")
+
+	http.HandleFunc("/user", handlers.GetUser)
 	http.ListenAndServe(":8080", nil)
 
 }
