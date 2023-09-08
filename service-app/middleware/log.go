@@ -25,7 +25,7 @@ func (m *Mid) Logger(next web.HandlerFunc) web.HandlerFunc {
 		m.log.Info("completed",
 			zap.Any("Trace Id", v.TraceId),
 			zap.String("Method", r.Method), zap.Any("URL Path", r.URL.Path),
-			zap.Int("Status Code", v.StatusCode), zap.Duration("duration", time.Since(v.Now)))
+			zap.Int("status Code", v.StatusCode), zap.Duration("duration", time.Since(v.Now)))
 		if err != nil {
 			return err
 		}

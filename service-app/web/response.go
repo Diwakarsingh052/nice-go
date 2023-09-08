@@ -28,8 +28,8 @@ func RespondError(ctx context.Context, w http.ResponseWriter, err error) error {
 	//if any layer used it to create an error message or not for external users
 	ok := errors.As(err, &webErr)
 	if ok {
-		appErr := ErrorResponseJson{Error: webErr.Err.Error()}
-		err := Respond(ctx, w, appErr, webErr.Status)
+		appErr := ErrorResponseJson{Error: webErr.err.Error()}
+		err := Respond(ctx, w, appErr, webErr.status)
 		if err != nil {
 			return fmt.Errorf("problem in sending error response %w", err)
 		}
