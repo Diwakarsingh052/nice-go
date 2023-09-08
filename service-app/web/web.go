@@ -9,16 +9,18 @@ import (
 	"time"
 )
 
-// creating custom type for storing the value in the context
+// creating a custom type for storing the value in the context
 type ctxKey int
 
 const Key ctxKey = 1
 
+// App struct is used to inject dependencies in the web package
 type App struct {
 	*chi.Mux
 	*zap.Logger
 }
 
+// Values // we would put it in context so other layers can see traceId and when request started
 type Values struct {
 	TraceId    string
 	Now        time.Time
@@ -37,8 +39,10 @@ func (a *App) HandleFunc(method string, pattern string, handler HandlerFunc) {
 		}
 
 		ctx := r.Context()
+		// putting the values in the context
 		ctx = context.WithValue(ctx, Key, v)
 
+		//exec the handler
 		err := handler(ctx, w, r)
 		if err != nil {
 			a.Logger.Error("error escaped from the middleware ", zap.Any("Error", err))
