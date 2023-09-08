@@ -45,6 +45,7 @@ func LoggingMid() {
 	//return correct value
 	return {
 		// check context is set or not // get the value out of the context and store in a variable
+		ctx :=  r.Context()
 
 		if !ok {
 			reqID = "unknown"
