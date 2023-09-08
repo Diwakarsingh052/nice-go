@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"service-app/handlers"
 	"time"
 )
 
@@ -32,6 +33,7 @@ func startApp(log *zap.Logger) error {
 		ReadTimeout:  8000 * time.Second,
 		WriteTimeout: 800 * time.Second,
 		IdleTimeout:  800 * time.Second,
+		Handler:      handlers.API(log),
 	}
 	// channel to store any errors while setting up the service
 	serverErrors := make(chan error, 1)
