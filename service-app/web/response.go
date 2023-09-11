@@ -45,3 +45,12 @@ func RespondError(ctx context.Context, w http.ResponseWriter, err error) error {
 	return nil
 
 }
+
+func Decode(r *http.Request, val any) error {
+	err := json.NewDecoder(r.Body).Decode(&val)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

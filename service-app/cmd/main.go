@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"service-app/auth"
+	"service-app/core/inventory"
+	"service-app/core/user"
+	"service-app/database"
 	"service-app/handlers"
 	"time"
 )
@@ -17,6 +21,11 @@ import (
 // go mod tidy // run it first time to set up this project and its deps,
 func main() {
 
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+		return
+	}
 	logging, err := setupLogger()
 	if err != nil {
 		log.Fatal(err)
@@ -27,9 +36,35 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+
 }
 
 func startApp(log *zap.Logger) error {
+	// =========================================================================
+	// Start Database
+	log.Info("main : Started : Initializing db support")
+	db, err := database.Open()
+	if err != nil {
+		return fmt.Errorf("connecting to db %w", err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	if err := db.Ping(ctx); err != nil {
+		return err
+	}
+
+	// =========================================================================
+	// Initialize Service layer support
+
+	us, err := user.NewService(db)
+	if err != nil {
+		return err
+	}
+	inv, err := inventory.NewService(db)
+	if err != nil {
+		return err
+	}
 
 	// =========================================================================
 	// Initialize authentication support
@@ -68,7 +103,7 @@ func startApp(log *zap.Logger) error {
 		ReadTimeout:  8000 * time.Second,
 		WriteTimeout: 800 * time.Second,
 		IdleTimeout:  800 * time.Second,
-		Handler:      handlers.API(log, a),
+		Handler:      handlers.API(log, a, us, inv),
 	}
 	// channel to store any errors while setting up the service
 	serverErrors := make(chan error, 1)

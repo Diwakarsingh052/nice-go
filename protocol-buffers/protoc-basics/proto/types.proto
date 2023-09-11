@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package proto;  //proto.v1
+
+
+//The go_package option should contain the full import path of the Go package
+//which contains the generated code for the .proto file
+option go_package = 'proto-basics/proto';
+
+//simple message
+//PascalCase, such as "BlogRequest"
+message BlogRequest {
+  //  reserved 2, 15, 9 to 11;  // uncomment this line to reserve the field numbers
+  int64 blog_id = 1;            //  lower_snake_case, such as "blog_id"
+  string title = 2;
+  string content = 3;
+}
+
+
+message SearchResponse {
+  //nested message
+  message Result {
+    string url = 1;
+    string title = 2;
+  }
+  // using message as field
+  repeated Result results = 1; // repeated is slice in go
+}
+//reuse Result message type outside SearchResponse message type
+message SearchResult {
+  SearchResponse.Result result = 1; //accessing a field from SearchResponse
+}
+
+//protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative types.proto
