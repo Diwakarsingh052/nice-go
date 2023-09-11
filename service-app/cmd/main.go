@@ -3,11 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"service-app/auth"
 	"service-app/handlers"
 	"time"
 )
@@ -28,12 +30,45 @@ func main() {
 }
 
 func startApp(log *zap.Logger) error {
+
+	// =========================================================================
+	// Initialize authentication support
+	log.Info("main : Started : Initializing authentication support")
+	privatePEM, err := os.ReadFile("private.pem")
+	if err != nil {
+		return fmt.Errorf("reading auth private key %w", err)
+	}
+
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM(privatePEM)
+	if err != nil {
+		return fmt.Errorf("parsing auth private key %w", err)
+	}
+
+	publicPEM, err := os.ReadFile("pubkey.pem")
+	if err != nil {
+		return fmt.Errorf("reading auth public key %w", err)
+	}
+
+	publicKey, err := jwt.ParseRSAPublicKeyFromPEM(publicPEM)
+	if err != nil {
+		return fmt.Errorf("parsing auth public key %w", err)
+	}
+
+	a, err := auth.NewAuth(privateKey, publicKey)
+	if err != nil {
+		return fmt.Errorf("constructing auth %w", err)
+	}
+
+	// =========================================================================
+
+	// =========================================================================
+	// Initialize service
 	api := http.Server{
 		Addr:         ":8080",
 		ReadTimeout:  8000 * time.Second,
 		WriteTimeout: 800 * time.Second,
 		IdleTimeout:  800 * time.Second,
-		Handler:      handlers.API(log),
+		Handler:      handlers.API(log, a),
 	}
 	// channel to store any errors while setting up the service
 	serverErrors := make(chan error, 1)
@@ -71,6 +106,8 @@ func startApp(log *zap.Logger) error {
 			return fmt.Errorf("could not stop server gracefully %w", err)
 		}
 	}
+
+	// =========================================================================
 	return nil
 
 }

@@ -7,12 +7,35 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-//create a key for the context
+// Two roles
+// Admin // User
+const (
+	RoleAdmin = "ADMIN"
+	RoleUser  = "USER"
+)
+
+// create a key for the context
+// ctxKey type would be used to put the claims in the context
+type ctxKey int
+
+const Key ctxKey = 1
 
 // Claims is our payload/core for out jwt token
 type Claims struct {
 	jwt.RegisteredClaims
 	Roles []string `json:"roles"`
+}
+
+func (c Claims) HasRoles(requiredRoles ...string) bool {
+	//if anytime user permission matches with requiredRoles then user is authorized to do that aciton
+	for _, has := range c.Roles {
+		for _, want := range requiredRoles {
+			if has == want {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // Auth struct privateKey field would be used to verify and generate token
