@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/username/reponame/exercise/interface/data"
-	"github.com/username/reponame/exercise/interface/data/stores/postgres"
+	"excercise/interface/data"
+	"excercise/interface/data/stores/postgres"
+
 	"log"
 )
 

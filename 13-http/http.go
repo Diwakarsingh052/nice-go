@@ -1,6 +1,8 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func main() {
 	//Home is handlerFunc
@@ -17,5 +19,6 @@ func main() {
 func Home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+
 	w.Write([]byte("hello this is our first home page"))
 }
